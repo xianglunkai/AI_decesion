@@ -1,0 +1,5 @@
+# Visual Studio Code files
+.vscode
+
+#output
+grid_tied_allocation/build
