@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 # set external environment variables path
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/toolchain.cmake)
+# set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/toolchain.cmake)
 
 project(grid_tied_allocation VERSION 1.0)
 

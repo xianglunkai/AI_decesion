@@ -132,14 +132,14 @@ int main(int argc, char** argv)
 		std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(tf - t0);
 
 		x.clear();
-		printf("[u = %f]: ", u);
+		printf("expect allocation: %f, ", u);
 		float total_u = 0;
 		for (auto& v : allocation_result) {
 			x.push_back(v.second);
 			total_u += v.second;
-			printf("(%d, %f) ", v.first, v.second);
+			printf("[id:%d, val:%f] ", v.first, v.second);
 		}
-		printf("[consumed_time(ms)]: %f ; total allocation:%f\n", 1000 * static_cast<double>(time_span.count()), total_u);
+		printf("consumed_time: %f(ms) ; real allocation: %f\n", 1000 * static_cast<double>(time_span.count()), total_u);
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
