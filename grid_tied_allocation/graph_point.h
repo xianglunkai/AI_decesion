@@ -45,7 +45,6 @@ public:
 
 	// set previous point
 	void set_pre_point(const STGraphPoint& prev_point);
-
 private:
 	STPoint point_;
 	const STGraphPoint* pre_point_ = nullptr;

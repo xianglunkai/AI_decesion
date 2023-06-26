@@ -9,7 +9,7 @@
 namespace ai_decision {
 namespace grid_tied_allocation {
 
-GriddedSTGraph::GriddedSTGraph(const DpOptimizerConfig& config)
+GriddedSTGraph::GriddedSTGraph(const OptimizerConfig& config)
  : gridded_graph_config_(config),
    dp_st_cost_(config)
 {}

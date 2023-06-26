@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#include <heuristic_optimizer.h>
+#include "grid_tied_allocation.h"
 
 using namespace ai_decision;
 using namespace grid_tied_allocation;
@@ -12,16 +12,18 @@ using namespace grid_tied_allocation;
 int main(int argc, char** argv)
 {
 	// set configuration parameters
-	DpOptimizerConfig config;
+	OptimizerConfig config;
 	config.clear_config();
 
 	// set resolution
 	config.allocation_resolution(10);
 	// set type
 	config.allocation_type(AllocationType::MARGIN_ALLOCATION);
+	// set solve method
+	config.enable_nlopt(true);
 
-	std::vector<DpOptimizerConfig::ItemConfig> items;
-	DpOptimizerConfig::ItemConfig it;
+	std::vector<OptimizerConfig::ItemConfig> items;
+	OptimizerConfig::ItemConfig it;
 
 	// 1
 	it.assigned_factor = 0.125f;
@@ -115,17 +117,19 @@ int main(int argc, char** argv)
 	config.items_config(items);
 
 	// create algorithm
-	GriddedSTGraph dp(config);
 	const std::vector<float> current_state{100, 80, 45, 10, 100, 70, 10, 180};
 	const std::vector<float> comands{400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f};
 	std::vector<std::pair<uint32_t, float>> allocation_result;
+
+	// create allocation algorithm
+	GridTiedAllocation opt(config);
 
 	std::vector<float> x = std::move(current_state);
 	for (auto& u : comands) {
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		allocation_result.clear();
-		dp.process(x, u, &allocation_result);
+		opt.process(x, u, &allocation_result);
 
 		std::chrono::steady_clock::time_point tf = std::chrono::steady_clock::now();
 
@@ -137,7 +141,7 @@ int main(int argc, char** argv)
 		for (auto& v : allocation_result) {
 			x.push_back(v.second);
 			total_u += v.second;
-			printf("[id:%d, val:%f] ", v.first, v.second);
+			printf("%f ", v.second);
 		}
 		printf("consumed_time: %f(ms) ; real allocation: %f\n", 1000 * static_cast<double>(time_span.count()), total_u);
 

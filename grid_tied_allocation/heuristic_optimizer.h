@@ -11,7 +11,7 @@ namespace grid_tied_allocation {
 
 class GriddedSTGraph {
 public:
-	explicit GriddedSTGraph(const DpOptimizerConfig& config);
+	explicit GriddedSTGraph(const OptimizerConfig& config);
 
 	/* Do not allow copies */
 	GriddedSTGraph(const GriddedSTGraph &other) = delete;
@@ -58,8 +58,8 @@ private:
 	std::vector<std::pair<uint32_t, float>> policy_reference_;
 
 	// dp st configuration
-	const DpOptimizerConfig& gridded_graph_config_;
-	std::vector<DpOptimizerConfig::ItemConfig> items_config_;
+	const OptimizerConfig& gridded_graph_config_;
+	std::vector<OptimizerConfig::ItemConfig> items_config_;
 
 	// cost_table_[t][s]
 	// row: s, col: t --- NOTICE: Please do NOT change.

@@ -9,14 +9,14 @@
 #include <assert.h>
 
 #include "graph_point.h"
-#include "dp_optimizer_config.h"
+#include "optimizer_config.h"
 
 namespace ai_decision {
 namespace grid_tied_allocation {
 
 class DpStCost {
 public:
-	explicit DpStCost(const DpOptimizerConfig& config):
+	explicit DpStCost(const OptimizerConfig& config):
 	config_(config)
 	{
 		// todo: check that dimensions agreements
@@ -30,7 +30,7 @@ public:
 			     const float policy_reference) const;
 
 private:
-	const DpOptimizerConfig& config_;
+	const OptimizerConfig& config_;
 };
 
 } // namespace grid_tied_allo
