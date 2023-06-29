@@ -8,6 +8,7 @@
 #include <vector>
 #include <utility>
 #include <cstdint>
+#include <string>
 
 #include "common.h"
 
@@ -42,6 +43,8 @@ public:
 	// rest configuration
 	void clear_config() { items_config_.clear(); }
 
+	bool check_config(std::string &str_error);
+
 	// write configuration parameters
 	void items_config(std::vector<ItemConfig>& config) { items_config_ = config; }
 
@@ -50,6 +53,8 @@ public:
 	void allocation_resolution(const float allocation_resolution) { allocation_resolution_ = allocation_resolution; }
 
 	void enable_nlopt(const bool enable_nlopt) { nlopt_enabled_ = enable_nlopt; }
+
+	void enable_multi_threads_in_dp(const bool enable_multi_threads_in_dp) { enable_multi_threads_in_dp_ = enable_multi_threads_in_dp; }
 
 	// read configuration parameters
 	const std::vector<ItemConfig>& items_config() const { return items_config_; }
@@ -60,13 +65,23 @@ public:
 
 	const bool enable_nlopt() const { return nlopt_enabled_; }
 
+	const bool enable_multi_threads_in_dp() const { return enable_multi_threads_in_dp_; }
+
 private:
   	static OptimizerConfig *singleton_;
+
 	std::vector<ItemConfig>  items_config_;
+
 	AllocationType allocation_type_{AllocationType::MARGIN_ALLOCATION};
+
 	float allocation_resolution_{10.0f};
-	bool nlopt_enabled_{true};
+
+	bool nlopt_enabled_{false};
+
+	bool enable_multi_threads_in_dp_{false};
 };
+
+OptimizerConfig *optimizer_config();
 
 } // namespace grid_tied_allo
 } // ai_decision

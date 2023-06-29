@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <mutex>
 
 #include "heuristic_optimizer.h"
 
@@ -165,14 +166,34 @@ bool GriddedSTGraph::calculate_total_cost()
 	// s corresponding to row
 	size_t next_highest_row = 0;
   	size_t next_lowest_row = 0;
+	std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+
 	for (size_t c = 0; c < cost_table_.size(); c++) {
 		auto& cost_table_i = cost_table_.at(c);
-		for (size_t r = 0; r < cost_table_i.size(); r++) {
+		const size_t next_highest_row = cost_table_i.size();
+		std::vector<std::future<void>> results;
+
+		for (size_t r = 0; r < next_highest_row; r++) {
 			auto msg = std::make_shared<StGraphMessage>(c, r);
-		 	calculate_cost_at(msg);
+
+			if (gridded_graph_config_.enable_multi_threads_in_dp()) {
+				results.push_back(Async(&GriddedSTGraph::calculate_cost_at, this, msg));
+			} else {
+				calculate_cost_at(msg);
+			}
+		}
+
+		if (gridded_graph_config_.enable_multi_threads_in_dp()) {
+			for (auto& result : results) {
+				result.get();
+			}
 		}
 	}
 
+	std::chrono::steady_clock::time_point tf = std::chrono::steady_clock::now();
+	std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(tf - t0);
+
+	printf("tf-t0: %f(ms) ", 1000 * static_cast<double>(time_span.count()));
 	return true;
 }
 

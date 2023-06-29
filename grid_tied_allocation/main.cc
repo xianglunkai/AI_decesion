@@ -22,6 +22,9 @@ int main(int argc, char** argv)
 	// set solve method
 	config.enable_nlopt(true);
 
+	// set parallel computing mode
+	config.enable_multi_threads_in_dp(false);
+
 	std::vector<OptimizerConfig::ItemConfig> items;
 	OptimizerConfig::ItemConfig it;
 
