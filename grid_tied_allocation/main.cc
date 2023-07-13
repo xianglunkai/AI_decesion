@@ -18,9 +18,9 @@ int main(int argc, char** argv)
 	// set resolution
 	config.allocation_resolution(10);
 	// set type
-	config.allocation_type(AllocationType::MARGIN_ALLOCATION);
+	config.allocation_type(AllocationType::PROPORTIONAL_ALLOCATION);
 	// set solve method
-	config.enable_nlopt(true);
+	config.enable_nlopt(false);
 
 	// set parallel computing mode
 	config.enable_multi_threads_in_dp(false);
@@ -121,7 +121,10 @@ int main(int argc, char** argv)
 
 	// create algorithm
 	const std::vector<float> current_state{100, 80, 45, 10, 100, 70, 10, 180};
-	const std::vector<float> comands{400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f};
+	// const std::vector<float> comands{400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f};
+
+	// const std::vector<float> current_state{110, 110, 110, 110, 110, 110, 110, 110};
+	const std::vector<float> comands{0.f};
 	std::vector<std::pair<uint32_t, float>> allocation_result;
 
 	// create allocation algorithm

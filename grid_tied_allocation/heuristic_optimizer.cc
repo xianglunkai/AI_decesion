@@ -69,7 +69,7 @@ bool GriddedSTGraph::init_items_config(const float reference_allocation_command)
 	total_length_s_ = reference_allocation_command;
 	unit_s_ = gridded_graph_config_.allocation_resolution();
 
-	return !items_config_.empty();
+	return total_length_s_ >= 0 && !items_config_.empty();
 }
 
 bool GriddedSTGraph::init_cost_table()
@@ -77,7 +77,7 @@ bool GriddedSTGraph::init_cost_table()
 	dimension_t_ = static_cast<uint32_t>(std::ceil(total_length_t_ /  unit_t_));
 	dimension_s_ = static_cast<uint32_t>(std::ceil(total_length_s_ / unit_s_)) + 1;
 
-	if (dimension_s_ < 1 || dimension_t_ < 1) {
+	if (dimension_t_ < 1) {
 		const std::string msg = "DP cost table size incorrect";
 		std::cout << msg << std::endl;
 		return false;
@@ -164,10 +164,6 @@ bool GriddedSTGraph::calculate_total_cost()
 	// col and row are for STGraph
 	// t corresponding to col
 	// s corresponding to row
-	size_t next_highest_row = 0;
-  	size_t next_lowest_row = 0;
-	std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-
 	for (size_t c = 0; c < cost_table_.size(); c++) {
 		auto& cost_table_i = cost_table_.at(c);
 		const size_t next_highest_row = cost_table_i.size();
@@ -189,11 +185,6 @@ bool GriddedSTGraph::calculate_total_cost()
 			}
 		}
 	}
-
-	std::chrono::steady_clock::time_point tf = std::chrono::steady_clock::now();
-	std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(tf - t0);
-
-	printf("tf-t0: %f(ms) ", 1000 * static_cast<double>(time_span.count()));
 	return true;
 }
 
@@ -235,6 +226,7 @@ bool GriddedSTGraph::retrieve_allocation_profile(std::vector<std::pair<uint32_t,
 	}
 
 	*allocation_result = std::move(result);
+
 	return true;
 }
 
@@ -258,7 +250,7 @@ void GriddedSTGraph::calculate_cost_at(const std::shared_ptr<StGraphMessage>& ms
 	}
 
  	const auto& pre_col = cost_table_[c - 1];
-	for (size_t i = 0; i < r; i++) {
+	for (size_t i = 0; i <= r; i++) {
 		if (std::isinf(pre_col[i].total_cost())) {
 			continue;
 		}
