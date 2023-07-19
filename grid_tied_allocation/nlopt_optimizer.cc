@@ -115,12 +115,12 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	}
 
 	for (size_t i = 0; i < constraints.size(); i++) {
-		optimizer.add_inequality_constraint(inequality_constraint, &constraints[i], 1e-8);
+		optimizer.add_inequality_constraint(inequality_constraint, &constraints[i], 1e-3);
 	}
 
 	// set constraints for equality
 	double command = reference_command;
-	optimizer.add_equality_constraint(equality_constraint, &command, 1e-8);
+	optimizer.add_equality_constraint(equality_constraint, &command, 1e-3);
 
 	// optimization process
 	double minimum = 0;
