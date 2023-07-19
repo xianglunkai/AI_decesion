@@ -28,6 +28,8 @@ private:
 
 	bool init_reference_allocation_lookup(const std::vector<float>& current_state, const float reference_allocation_command);
 
+	bool check_policy_output(std::vector<std::pair<uint32_t, float>>* const allocation_result);
+
 	bool retrieve_allocation_profile(std::vector<std::pair<uint32_t, float>>* const allocation_result);
 
 	bool calculate_total_cost();

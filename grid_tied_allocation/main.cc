@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	config.clear_config();
 
 	// set resolution
-	config.allocation_resolution(10);
+	config.allocation_resolution(3.9);
 	// set type
 	config.allocation_type(AllocationType::PROPORTIONAL_ALLOCATION);
 	// set solve method
@@ -121,17 +121,16 @@ int main(int argc, char** argv)
 
 	// create algorithm
 	const std::vector<float> current_state{100, 80, 45, 10, 100, 70, 10, 180};
-	// const std::vector<float> comands{400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f};
+	//const std::vector<float> commands{400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f};
+	const std::vector<float> commands{1730.0f};
 
-	// const std::vector<float> current_state{110, 110, 110, 110, 110, 110, 110, 110};
-	const std::vector<float> comands{0.f};
 	std::vector<std::pair<uint32_t, float>> allocation_result;
 
 	// create allocation algorithm
 	GridTiedAllocation opt(config);
 
 	std::vector<float> x = std::move(current_state);
-	for (auto& u : comands) {
+	for (auto& u : commands) {
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		allocation_result.clear();

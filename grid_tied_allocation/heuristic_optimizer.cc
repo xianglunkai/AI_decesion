@@ -26,14 +26,18 @@ bool GriddedSTGraph::process(const std::vector<float>& current_state,
 		return false;
 	}
 
-	if (!init_cost_table()) {
-		const std::string msg = "Initialize cost table failed.";
+	if (!init_reference_allocation_lookup(current_state, reference_allocation_command)) {
+	 	const std::string msg = "Initialize refernce allocation lookup table failed.";
 		std::cout << msg << std::endl;
 		return false;
 	}
 
-	if (!init_reference_allocation_lookup(current_state, reference_allocation_command)) {
-	 	const std::string msg = "Initialize refernce allocation lookup table failed.";
+	if (check_policy_output(allocation_result)) {
+		return true;
+	}
+
+	if (!init_cost_table()) {
+		const std::string msg = "Initialize cost table failed.";
 		std::cout << msg << std::endl;
 		return false;
 	}
@@ -185,6 +189,38 @@ bool GriddedSTGraph::calculate_total_cost()
 			}
 		}
 	}
+	return true;
+}
+
+
+bool GriddedSTGraph::check_policy_output(std::vector<std::pair<uint32_t, float>>* const allocation_result)
+{
+
+	std::vector<std::pair<uint32_t, float>> result;
+	for (size_t i = 0; i  < policy_reference_.size(); ++i) {
+		const uint32_t index = items_config_.at(i).index;
+		float value = policy_reference_.at(i).second;
+
+		// check value is within range
+		if (value > items_config_.at(i).upper_bound || value < items_config_.at(i).lower_bound) {
+			return false;
+		}
+
+		// check value is within resonance
+		const auto& resonances = items_config_.at(i).resonances;
+		for (const auto& zone : resonances) {
+			const auto& a = zone.first;
+			const auto& b = zone.second;
+			if (value >a && value <b) {
+				return false;
+			}
+		}
+
+		result.emplace_back(std::make_pair(index, value));
+	}
+
+	*allocation_result = std::move(result);
+
 	return true;
 }
 
