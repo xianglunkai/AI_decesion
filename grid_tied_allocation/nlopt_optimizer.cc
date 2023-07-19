@@ -97,7 +97,7 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	optimizer.set_upper_bounds(opt_ub_);
 
 	// set boundary parameters
-	optimizer.set_xtol_rel(1e-3);
+	optimizer.set_xtol_rel(1e-1);
         optimizer.set_maxeval(1000);
 	optimizer.set_maxtime(0.075);
 

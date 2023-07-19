@@ -16,11 +16,11 @@ int main(int argc, char** argv)
 	config.clear_config();
 
 	// set resolution
-	config.allocation_resolution(3.9);
+	config.allocation_resolution(10);
 	// set type
 	config.allocation_type(AllocationType::PROPORTIONAL_ALLOCATION);
 	// set solve method
-	config.enable_nlopt(false);
+	config.enable_nlopt(true);
 
 	// set parallel computing mode
 	config.enable_multi_threads_in_dp(false);
