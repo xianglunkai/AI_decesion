@@ -71,6 +71,37 @@ bool NonlinearOptimization::init_items_config(const float reference_command)
 }
 
 
+void NonlinearOptimization::build_bounds(const std::vector<double> &x, std::vector<double> &lb, std::vector<double> &ub)
+{
+	for (size_t i = 0; i < opt_dimension_; i++) {
+		if (is_negative(x[i] - lb[i]) || is_zero(x[i] - lb[i])) {
+			ub[i] = lb[i];
+			continue;
+		}
+
+		double lower = lb[i];
+		bool find_bound = false;
+		const auto& item = items_config_.at(i).resonances;
+		for (const auto& constraint : item) {
+			const auto a = constraint.first;
+			const auto b = constraint.second;
+			if (is_negative(x[i] - a) || is_zero(x[i] - a)) {
+				lb[i] = lower;
+				ub[i] = a;
+				find_bound = true;
+				break;
+			}
+
+			lower = b;
+		}
+
+		if (!find_bound) {
+			lb[i] = lower;
+		}
+	}
+
+}
+
 bool NonlinearOptimization::retrieve_allocation_profile(const float reference_command,
 							const std::vector<std::pair<uint32_t, float>>& guess_solution,
 							std::vector<std::pair<uint32_t, float>>* const solution)
@@ -90,9 +121,11 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	assert(x.size() == opt_dimension_);
 
 	// define a optimization
-	nlopt::opt optimizer(nlopt::LN_COBYLA, opt_dimension_);
+	nlopt::opt optimizer(nlopt::LD_SLSQP, opt_dimension_);
 
 	// set lower bound and upper bound
+	build_bounds(x, opt_lb_, opt_ub_);
+
 	optimizer.set_lower_bounds(opt_lb_);
 	optimizer.set_upper_bounds(opt_ub_);
 
@@ -100,24 +133,10 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	optimizer.set_xtol_rel(1e-3);
 	optimizer.set_ftol_abs(1e-3);
         optimizer.set_maxeval(1000);
-	optimizer.set_maxtime(0.075);
+	optimizer.set_maxtime(0.05);
 
 	// set objective function
 	optimizer.set_min_objective(objective, &policy_reference_);
-
-	// set constraints for inequality
-	std::vector<std::tuple<uint32_t, double, double>> constraints;
-	for (size_t i = 0; i < items_config_.size(); ++i) {
-		const auto& item = items_config_.at(i).resonances;
-		for (const auto& constraint : item) {
-			std::tuple<uint32_t, double, double> interval{i, constraint.first, constraint.second};
-			constraints.emplace_back(interval);
-		}
-	}
-
-	for (size_t i = 0; i < constraints.size(); i++) {
-		optimizer.add_inequality_constraint(inequality_constraint, &constraints[i], 1e-3);
-	}
 
 	// set constraints for equality
 	double command = reference_command;
@@ -207,8 +226,9 @@ double NonlinearOptimization::objective(const std::vector<double>& x, std::vecto
 	assert(x.size() == reference->size());
 
 	if (!grad.empty()) {
+		grad.clear();
 		for (std::size_t i = 0; i < x.size(); i++) {
-			grad[i] = 2 * (x[i] - reference->at(i));
+			grad.emplace_back( 2 * (x[i] - reference->at(i)));
 		}
 	}
 
@@ -234,8 +254,9 @@ double NonlinearOptimization::equality_constraint(const std::vector<double>& x, 
 	double *u = (double*)data;
 
 	if (!grad.empty()) {
+		grad.clear();
 		for (std::size_t i = 0; i < x.size(); i++) {
-			grad[i] = 1.0;
+			grad.emplace_back(1.0);
 		}
 	}
 

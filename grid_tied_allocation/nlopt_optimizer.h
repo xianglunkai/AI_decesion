@@ -38,6 +38,8 @@ public:
 private:
 	bool init_items_config(const float reference_command);
 
+	void build_bounds(const std::vector<double> &x, std::vector<double> &lb, std::vector<double> &ub);
+
 	bool retrieve_allocation_profile(const float reference_command, const std::vector<std::pair<uint32_t, float>>& guess_solution, std::vector<std::pair<uint32_t, float>>* const solution);
 
 	bool init_reference_allocation_lookup(const std::vector<float>& current_state, const float reference_allocation_command);
