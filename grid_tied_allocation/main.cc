@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	config.clear_config();
 
 	// set resolution
-	config.allocation_resolution(10);
+	config.allocation_resolution(15);
 	// set type
 	config.allocation_type(AllocationType::MARGIN_ALLOCATION);
 	// set solve method
