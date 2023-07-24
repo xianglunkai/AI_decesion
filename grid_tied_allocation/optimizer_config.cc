@@ -49,7 +49,7 @@ bool OptimizerConfig::check_config(std::string &str_error)
 		for (size_t j = 0; j < item.resonances.size(); j++) {
 			const auto &res = item.resonances[j];
 			// must be ensure [a, b] is within [lower, upper]
-			if (res.first >= res.second ||
+			if (res.first > res.second ||
 			    res.first < item.lower_bound ||
 			    res.second > item.upper_bound) {
 				str_error  = std::move("resonance range error");
