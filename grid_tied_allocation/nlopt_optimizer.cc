@@ -97,7 +97,7 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	optimizer.set_upper_bounds(opt_ub_);
 
 	// set boundary parameters
-	optimizer.set_xtol_rel(1e-1);
+	optimizer.set_xtol_rel(1e-3);
         optimizer.set_maxeval(1000);
 	optimizer.set_maxtime(0.075);
 
@@ -127,8 +127,10 @@ bool NonlinearOptimization::retrieve_allocation_profile(const float reference_co
 	try {
 		optimizer.optimize(x, minimum);
 	} catch (const std::exception& e) {
-		std::cerr << "NLopt failed: " << e.what() << std::endl;
-		return false;
+		// return coarse solution
+		*solution = std::move(guess_solution);
+		std::cout << "NLopt failed: " << e.what() << std::endl;
+		return true;
 	}
 
 	// return planning results
