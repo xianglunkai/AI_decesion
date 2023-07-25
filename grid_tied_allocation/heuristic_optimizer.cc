@@ -195,7 +195,7 @@ bool GriddedSTGraph::calculate_total_cost()
 
 bool GriddedSTGraph::check_policy_output(std::vector<std::pair<uint32_t, float>>* const allocation_result)
 {
-
+	is_exact_policy_ = false;
 	std::vector<std::pair<uint32_t, float>> result;
 	for (size_t i = 0; i  < policy_reference_.size(); ++i) {
 		const uint32_t index = items_config_.at(i).index;
@@ -220,6 +220,7 @@ bool GriddedSTGraph::check_policy_output(std::vector<std::pair<uint32_t, float>>
 	}
 
 	*allocation_result = std::move(result);
+	is_exact_policy_ = true;
 
 	return true;
 }

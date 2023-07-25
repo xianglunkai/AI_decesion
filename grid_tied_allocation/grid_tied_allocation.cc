@@ -25,7 +25,7 @@ bool GridTiedAllocation::process(const std::vector<float>& current_state,
 		return false;
 	}
 
-	if (!config_.enable_nlopt()) {
+	if (!config_.enable_nlopt() || dp_.is_exact_policy()) {
 		*allocation_result = std::move(coarse_solution);
 		return true;
 	}

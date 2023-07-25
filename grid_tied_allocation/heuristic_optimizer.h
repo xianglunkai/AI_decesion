@@ -21,6 +21,8 @@ public:
 		     const float reference_allocation_command,
 		     std::vector<std::pair<uint32_t, float>>* const allocation_result);
 
+	bool is_exact_policy() const { return is_exact_policy_; }
+
 private:
 	bool init_items_config(const float reference_allocation_command);
 
@@ -58,6 +60,7 @@ private:
 	// policy requirements
 	AllocationType allocation_type_;
 	std::vector<std::pair<uint32_t, float>> policy_reference_;
+	bool is_exact_policy_{false};
 
 	// dp st configuration
 	const OptimizerConfig& gridded_graph_config_;
