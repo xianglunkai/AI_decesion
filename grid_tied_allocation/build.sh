@@ -1,11 +1,18 @@
 #!/bin/bash
 
-read -p "Please select build platform:[T3 x64]" platform
+read -p "Please select build platform:[arm7.5 arm4.8 x64]" platform
 case $platform in
-	T3)
-	echo " build platform on T3"
+	arm7.5)
+	echo " build platform on arm7.5"
 	rm -rf build
-	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain.cmake -S . -B ./build
+	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/armgcc7.5_toolchain.cmake -S . -B ./build
+	cd $(pwd)/build
+	make
+	;;
+	arm4.8)
+	echo " build platform on arm4.8"
+	rm -rf build
+	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/armgcc4.8_toolchain.cmake -S . -B ./build
 	cd $(pwd)/build
 	make
 	;;
