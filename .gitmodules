@@ -1,3 +1,6 @@
 [submodule "modules/nlopt"]
 	path = modules/nlopt
 	url = https://github.com/stevengj/nlopt.git
+[submodule "modules/osqp"]
+	path = modules/osqp
+	url = https://github.com/osqp/osqp
