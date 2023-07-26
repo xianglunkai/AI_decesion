@@ -18,12 +18,16 @@ int main(int argc, char** argv)
 	// set resolution
 	config.allocation_resolution(15);
 	// set type
-	config.allocation_type(AllocationType::PROPORTIONAL_ALLOCATION);
+	config.allocation_type(AllocationType::MARGIN_ALLOCATION);
 	// set solve method
 	config.enable_nlopt(true);
 
 	// set parallel computing mode
 	config.enable_multi_threads_in_dp(false);
+
+	// small load algorithm
+	config.small_load_dead_size(100.0f);
+	config.enable_small_load_alg(true);
 
 	std::vector<OptimizerConfig::ItemConfig> items;
 	OptimizerConfig::ItemConfig it;
@@ -121,7 +125,8 @@ int main(int argc, char** argv)
 
 	// create algorithm
 	const std::vector<float> current_state{100, 80, 45, 10, 100, 70, 10, 180};
-	const std::vector<float> commands{0, 400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f, 1730.0f};
+	// const std::vector<float> commands{0, 400.f, 800.f, 1200.f, 1600.f, 1500.f, 1000.f, 600.f, 1300.f, 1730.0f};
+	const std::vector<float> commands{400.0f, 500.0f, 450.0f, 550.0f, 600.0f, 1500.0f, 1600.0f, 1550.0f, 1650.0f, 1700.0f};
 
 
 	std::vector<std::pair<uint32_t, float>> allocation_result;

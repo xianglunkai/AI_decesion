@@ -56,6 +56,10 @@ public:
 
 	void enable_multi_threads_in_dp(const bool enable_multi_threads_in_dp) { enable_multi_threads_in_dp_ = enable_multi_threads_in_dp; }
 
+	void small_load_dead_size(const float small_load_dead_size) { small_load_dead_size_ = small_load_dead_size;}
+
+	void enable_small_load_alg(const bool enable_small_load_alg) { enable_small_load_alg_ = enable_small_load_alg; }
+
 	// read configuration parameters
 	const std::vector<ItemConfig>& items_config() const { return items_config_; }
 
@@ -66,6 +70,10 @@ public:
 	const bool enable_nlopt() const { return nlopt_enabled_; }
 
 	const bool enable_multi_threads_in_dp() const { return enable_multi_threads_in_dp_; }
+
+	const float small_load_dead_size() const { return small_load_dead_size_; }
+
+	const bool enable_small_load_alg() const { return enable_small_load_alg_; }
 
 private:
   	static OptimizerConfig *singleton_;
@@ -79,6 +87,10 @@ private:
 	bool nlopt_enabled_{false};
 
 	bool enable_multi_threads_in_dp_{false};
+
+	bool enable_small_load_alg_{false};
+
+	float small_load_dead_size_{100.0f};
 };
 
 OptimizerConfig *optimizer_config();

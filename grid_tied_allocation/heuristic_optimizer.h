@@ -19,9 +19,9 @@ public:
 
 	bool process(const std::vector<float>& current_state,
 		     const float reference_allocation_command,
-		     std::vector<std::pair<uint32_t, float>>* const allocation_result);
+		     std::vector<std::pair<uint32_t, float>>* const allocation_result) WARN_IF_UNUSED;
 
-	bool is_exact_policy() const { return is_exact_policy_; }
+	const bool is_exact_policy() const WARN_IF_UNUSED { return is_exact_policy_; }
 
 private:
 	bool init_items_config(const float reference_allocation_command);

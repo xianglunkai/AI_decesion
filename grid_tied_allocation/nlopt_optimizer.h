@@ -33,7 +33,7 @@ public:
 	bool process(const std::vector<float>& current_state,
 		     const std::vector<std::pair<uint32_t, float>>& guess_solution,
 		     const float reference_command,
-		     std::vector<std::pair<uint32_t, float>>* const solution);
+		     std::vector<std::pair<uint32_t, float>>* const solution) WARN_IF_UNUSED;
 
 private:
 	bool init_items_config(const float reference_command);

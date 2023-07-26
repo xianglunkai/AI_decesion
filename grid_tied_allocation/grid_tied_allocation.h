@@ -2,6 +2,7 @@
 
 #include "heuristic_optimizer.h"
 #include "nlopt_optimizer.h"
+#include "small_load_assignment.h"
 
 namespace ai_decision {
 namespace grid_tied_allocation {
@@ -12,15 +13,16 @@ private:
 	const OptimizerConfig& config_;
 	GriddedSTGraph dp_;
 	NonlinearOptimization nlopt_;
+	SmallLoadAssignment small_load_assignment_;
 public:
 	explicit GridTiedAllocation(const OptimizerConfig& config)
-	:dp_(config),nlopt_(config), config_(config){}
+	:dp_(config),nlopt_(config), small_load_assignment_(config), config_(config){}
 
 	~GridTiedAllocation() = default;
 
 	bool process(const std::vector<float>& current_state,
 		     const float reference_command,
-		     std::vector<std::pair<uint32_t, float>>* const allocation_result);
+		     std::vector<std::pair<uint32_t, float>>* const allocation_result) WARN_IF_UNUSED;
 };
 
 } // namespace grid_tied_allo

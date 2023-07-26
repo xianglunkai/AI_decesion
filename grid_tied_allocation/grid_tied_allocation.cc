@@ -17,7 +17,13 @@ bool GridTiedAllocation::process(const std::vector<float>& current_state,
 		return false;
 	}
 
-	// step 1: using dynamical programming algorithm to generate coarse solution
+	// use small load assignment policy
+	if (config_.enable_small_load_alg() && small_load_assignment_.process(current_state, reference_command, allocation_result)) {
+		// std::cout << " activate small load assignment algorithm" << std::endl;
+		return true;
+	}
+
+	// using dynamical programming algorithm to generate coarse solution
 	std::vector<std::pair<uint32_t, float>> coarse_solution;
 	if (!dp_.process(current_state, reference_command, &coarse_solution)) {
 		const std::string msg = "DP search failed";
