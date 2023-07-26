@@ -20,16 +20,19 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 include_directories(
 	.
 	../lib/nlopt/include
+  ../lib/osqp/include/opsqp
 )
 
 link_directories(
 	../lib/nlopt/lib
+  ../lib/osqp/lib
 )
 
 link_libraries(
 	rt
 	pthread
 	nlopt
+  osqpstatic
 )
 
 aux_source_directory(${CMAKE_SOURCE_DIR} SOURCE)
@@ -40,6 +43,7 @@ target_link_libraries(${PROJECT_NAME}
   rt
   pthread
   nlopt
+  osqpstatic
 )
 
 
