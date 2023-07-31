@@ -35,6 +35,9 @@ bool OptimizerConfig::check_config(std::string &str_error)
 	float assignment_sum = 0.0f;
 	for (size_t i = 0; i < items_config_.size(); ++i) {
 		const auto &item = items_config_.at(i);
+		if (!item.enabled) {
+			continue;
+		}
 		if (item.lower_bound >= item.upper_bound) {
 			str_error  = std::move("lower_bound < upper_bound");
 			return false;

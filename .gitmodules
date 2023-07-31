@@ -4,3 +4,9 @@
 [submodule "modules/osqp"]
 	path = modules/osqp
 	url = https://github.com/osqp/osqp
+[submodule "modules/libcmaes"]
+	path = modules/libcmaes
+	url = https://github.com/CMA-ES/libcmaes
+[submodule "modules/AI-Toolbox"]
+	path = modules/AI-Toolbox
+	url = https://github.com/Svalorzen/AI-Toolbox
