@@ -18,15 +18,20 @@ OptimizerConfig::OptimizerConfig()
 
 bool OptimizerConfig::check_config(std::string &str_error)
 {
-	// 1. check allocation type
-	if (allocation_type_ != AllocationType::PROPORTIONAL_ALLOCATION &&
-	    allocation_type_ != AllocationType::MARGIN_ALLOCATION) {
+	// 1. check allocation type and algorithms
+	if (allocation_type_ >= AllocationType::LAST_ALLOCATION) {
 		str_error  = std::move("allocator type mismatch");
 		return false;
 	    }
 
+	if (allocation_algorithm_ >= AllocationAlgorithm::LAST_ALGORITHM) {
+		str_error = std::move("allocation algorithm mismatch");
+		return false;
+	}
+
 	// 2. check allocation resolution
 	if (allocation_resolution_ < 1) {
+		str_error = std::move("allocation resolution must be greater than 1.0f");
 		return false;
 	}
 

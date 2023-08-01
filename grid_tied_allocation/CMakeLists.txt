@@ -12,7 +12,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-w)
     add_compile_options(-std=c++11)
-    add_compile_options(-Wall -O2 -c) #g
+    add_compile_options(-Wall -O2 -c -fpermissive) #g
     add_compile_options(-D _GLIBCXX_USE_NANOSLEEP)
     message(STATUS "optional:-std=c++11")
 endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -20,7 +20,7 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 include_directories(
 	.
 	../lib/nlopt/include
-  ../lib/osqp/include/opsqp
+  ../lib/osqp/include/osqp
 )
 
 link_directories(
@@ -47,3 +47,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
+add_custom_target(upload
+    COMMAND rsync -arh --progress
+          ${CMAKE_CURRENT_SOURCE_DIR}/bin/* # source
+          root@192.178.111.46:/mnt/mmc/algorithms/ # destination
+    COMMENT "uploading algorithm"
+    USES_TERMINAL
+)

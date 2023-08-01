@@ -17,7 +17,15 @@ namespace grid_tied_allocation {
 
 enum class AllocationType: std::uint8_t {
 	PROPORTIONAL_ALLOCATION = 0,
-	MARGIN_ALLOCATION = 1
+	MARGIN_ALLOCATION = 1,
+	LAST_ALLOCATION = 2
+};
+
+enum class AllocationAlgorithm: std::uint8_t {
+	NONE = 0,
+	OSQP = 1,
+	NLOPT = 2,
+	LAST_ALGORITHM = 3
 };
 
 class OptimizerConfig {
@@ -52,7 +60,7 @@ public:
 
 	void allocation_resolution(const float allocation_resolution) { allocation_resolution_ = allocation_resolution; }
 
-	void enable_nlopt(const bool enable_nlopt) { nlopt_enabled_ = enable_nlopt; }
+	void allocation_algorithm(const AllocationAlgorithm& allocation_algorithm) { allocation_algorithm_ = allocation_algorithm; }
 
 	void enable_multi_threads_in_dp(const bool enable_multi_threads_in_dp) { enable_multi_threads_in_dp_ = enable_multi_threads_in_dp; }
 
@@ -67,7 +75,7 @@ public:
 
 	const float allocation_resolution() const { return allocation_resolution_;}
 
-	const bool enable_nlopt() const { return nlopt_enabled_; }
+	const AllocationAlgorithm allocation_algorithm() const { return allocation_algorithm_; }
 
 	const bool enable_multi_threads_in_dp() const { return enable_multi_threads_in_dp_; }
 
@@ -84,13 +92,13 @@ private:
 
 	float allocation_resolution_{10.0f};
 
-	bool nlopt_enabled_{false};
-
 	bool enable_multi_threads_in_dp_{false};
 
 	bool enable_small_load_alg_{false};
 
 	float small_load_dead_size_{100.0f};
+
+	AllocationAlgorithm allocation_algorithm_{AllocationAlgorithm::NONE};
 };
 
 OptimizerConfig *optimizer_config();

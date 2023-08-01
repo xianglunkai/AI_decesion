@@ -31,17 +31,36 @@ bool GridTiedAllocation::process(const std::vector<float>& current_state,
 		return false;
 	}
 
-	if (!config_.enable_nlopt() || dp_.is_exact_policy()) {
+	if (dp_.is_exact_policy()) {
 		*allocation_result = std::move(coarse_solution);
 		return true;
 	}
 
 	// step2: using NLOPT algorithm to find solution exactly
-	if (!nlopt_.process(current_state, coarse_solution, reference_command, allocation_result)) {
-		const std::string msg = "NLOPT optimization failed";
-		std::cout << msg << std::endl;
-		return false;
+	switch (config_.allocation_algorithm())
+	{
+	case AllocationAlgorithm::NONE:
+		*allocation_result = std::move(coarse_solution);
+		break;
+	case AllocationAlgorithm::OSQP:
+		if (!osqp_.process(current_state, coarse_solution, reference_command, allocation_result)) {
+			const std::string msg = "OSQP optimization failed";
+			std::cout << msg << std::endl;
+			return false;
+		}
+		break;
+
+	case AllocationAlgorithm::NLOPT:
+		if (!nlopt_.process(current_state, coarse_solution, reference_command, allocation_result)) {
+			const std::string msg = "NLOPT optimization failed";
+			std::cout << msg << std::endl;
+			return false;
+		}
+		break;
+	default:
+		break;
 	}
+
 
 	return true;
 }

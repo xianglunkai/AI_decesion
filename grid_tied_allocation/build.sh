@@ -7,14 +7,14 @@ case $platform in
 	rm -rf build
 	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/armgcc7.5_toolchain.cmake -S . -B ./build
 	cd $(pwd)/build
-	make
+	make && make upload
 	;;
 	arm4.8)
 	echo " build platform on arm4.8"
 	rm -rf build
 	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/armgcc4.8_toolchain.cmake -S . -B ./build
 	cd $(pwd)/build
-	make
+	make && make upload
 	;;
 	x64)
 	echo " build platform on x64"

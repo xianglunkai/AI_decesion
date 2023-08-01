@@ -3,6 +3,7 @@
 #include "heuristic_optimizer.h"
 #include "nlopt_optimizer.h"
 #include "small_load_assignment.h"
+#include "osqp_optimizer.h"
 
 namespace ai_decision {
 namespace grid_tied_allocation {
@@ -14,9 +15,15 @@ private:
 	GriddedSTGraph dp_;
 	NonlinearOptimization nlopt_;
 	SmallLoadAssignment small_load_assignment_;
+	OsqpOptimizer osqp_;
 public:
 	explicit GridTiedAllocation(const OptimizerConfig& config)
-	:dp_(config),nlopt_(config), small_load_assignment_(config), config_(config){}
+	:dp_(config),
+	 nlopt_(config),
+	 osqp_(config),
+	 small_load_assignment_(config),
+	 config_(config)
+	 {}
 
 	~GridTiedAllocation() = default;
 
