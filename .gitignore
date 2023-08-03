@@ -4,5 +4,4 @@
 #output
 grid_tied_allocation/build
 grid_tied_allocation/bin
-test
 lib
